@@ -1,0 +1,4 @@
+`command+a`: 移动至行首
+`command+e`: 移动至行尾
+`command+d`: 相当于BackSpace
+
