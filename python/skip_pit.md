@@ -206,3 +206,91 @@ class Login:
 - [关于python中模块的环状引用(circular imports)](https://blog.csdn.net/yuanliang01xiaolang/article/details/50529871)
 - [python解决循环引用问题](https://www.jianshu.com/p/a1e91cc53b07)
 - [python模块循环引用导致问题](https://www.imooc.com/article/34235)
+
+## Centos环境初始化
+
+```pyhton
+# 编译时会出现缺失“Python.h”错误
+
+# 需要安装python-dev包，该包在ubuntu和yum上的名称不同
+
+# 在centos上：
+yum install python-devel  # 安装python2-dev
+yum install python36-devel  # 安装python3.6-dev
+
+# 在ubuntu上：（未测试）
+yum install python-dev  # 安装python2-dev
+yum install python36-dev  # 安装python3.6-dev
+
+```
+
+## Python 内存泄漏
+内存泄漏指的是：对象创建时分配内存，但结束时该对象的内存没有被释放（存在引用）。这种情况导致了随着程序的运行，会出现越来越多对象被创建却没有释放的情况，导致内存占用越来越大。
+
+两种场景：
+
+1. 程序不需要长时间运行，可以不用考虑内存泄漏。Python程序退出会自动删除所有的对象。
+2. 程序需要长时间运行，必须考虑内存泄漏。
+
+出现内存泄漏的原因：
+1. 应该被回收的对象被生命周期更长的对象所引用。如scrapy中，Request是生命周期最长的对象。假如将Response对象通过meta与Request对象绑定，同时Response的最大存活时间比Request的最大存活时间还要长，则一定是发生了内存泄漏。
+2. 存在多重引用。
+
+```python
+class DemoClass:
+    def __del__(self):
+        print("DemoClass对象内存占用被回收...")
+
+d1 = DemoClass()
+d2 = d1
+del d1  # 本应该在这里打印del的内容
+# 但却在这里打印了。
+
+出现这种情况的原因是：d2引用了d1，导致DemoClass一共出现了两个引用(d1/d2)。
+因此，仅仅删除d1不会触发垃圾回收机制，因而就不会执行del中的内容
+在程序最后退出的时候，会回收掉所有的对象，因此这里会执行DemoClass的del方法
+```
+3. 存在循环引用或者交叉引用。
+参考文章：
+
+- [Scrapy的内存泄露问题总结](https://www.imooc.com/article/50843)
+
+
+## property 动态属性
+```python
+class User1:
+    """property 动态属性"""
+
+    def __init__(self, name):
+        self.name = name
+
+    @property
+    def age(self):
+        return 18
+```
+
+## 属性描述符与非属性描述符
+```python
+class IntField(object):
+    """数据属性描述符"""
+
+    def __get__(self, instance, owner):
+        pass
+
+    def __set__(self, instance, value):
+        assert isinstance(value, int), "value must is a int"
+
+    def __delete__(self, instance):
+        pass
+
+
+class NonDataIntField(object):
+    """非数据属性描述符"""
+
+    def __get__(self, instance, owner):
+        return self.value
+
+
+class User2:
+    age = NonDataIntField()
+```
