@@ -69,6 +69,13 @@ source /etc/profile
 ```bash
 pip3 install --upgrade pip
 ```
+步骤五: 默认使用python3和pip3
+```bash
+which python
+cd /usr/bin/
+cp python python_2
+cp python-config python-config_2
+```
 
 ### 安装虚拟环境
 步骤一: 安装virtualenv
@@ -114,6 +121,9 @@ cdvirtualenv
 # 进入虚拟环境packages中
 cdsitepackages
 ```
+
+### 安装MySQL
+
 
 
 ### 安装jupyter
@@ -169,6 +179,10 @@ yum install redis
 redis-server  # 启动server
 
 redis-cli  # 启动client
+
+# 修改redis密码
+vi /etc/redis.conf
+requirepass rsf
 ```
 ```bash
 # 在Mac安装
@@ -224,4 +238,19 @@ sudo docker pull scrapinghub/splash
 
 # 在8050端口启动splash
 sudo docker run -it -p 8050:8050 scrapinghub/splash
+```
+### Centos 安装FTP服务
+```bash
+# 安装vsftpd
+yum install vsftpd -y
+
+# 启动服务
+systemctl start vsftpd
+
+# 设置为自启动
+chkconfig vsftpd on
+
+# 参考链接：
+- [ftp工具无法连接到Linux服务器](https://www.cnblogs.com/music-liang/p/11843273.html)
+
 ```

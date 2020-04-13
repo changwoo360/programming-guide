@@ -1,3 +1,6 @@
+* 算法
+    * [限速算法](algorithms/speed_limit_algorithm.md)
+
 * Python 基础
     * [Python 踩坑笔记](python/skip_pit.md)  
     * [Python 内置模块](python/built_in_modules)  
@@ -16,7 +19,7 @@
 * 效率工具与思维
     * [vim](tool/vim.md)
     * [mac apps](tool/mac_apps.md)
-
+    * [shortcuts](tool/mac_shortcuts.md)
 
 * 其他
     * [经验之谈](other/experience.md)
