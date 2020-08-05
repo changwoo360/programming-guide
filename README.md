@@ -1,3 +1,11 @@
+## 导航
+
+- [programming-guide](http://39.105.52.60:60001/)
+- [Debugs](https://www.notion.so/0ccf5aa46809446ea39a1088106efd25)
+- [Github](https://github.com/xiaoyinyulin/SimpleWisdom)
+- [博客园](https://www.cnblogs.com/changwoo/)
+
+
 ## 代码规范
 参考文章：
 1. [Google 开源项目风格指南](https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/contents/)

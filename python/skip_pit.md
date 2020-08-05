@@ -1,4 +1,4 @@
-## 不要同时使用readlines和readline
+### 不要同时使用readlines和readline
 
 ```python
 # 不要同时使用readlines和readline
@@ -12,7 +12,7 @@ with open(file, "r") as f:
 		f.readline()  # None
 ```
 
-## 避免循环累加
+### 避免循环累加
 ```python
 Yes: items = ['<table>']
      for last_name, first_name in employee_list:
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 	# func2的效率比func1的效率要高1/3
 ```
 
-## 不要在函数和方法中定义可变对象作为默认值  
+### 不要在函数和方法中定义可变对象作为默认值  
 ```python
 Yes: def foo(a, b=None):
          if b is None:
@@ -147,7 +147,7 @@ def是一条可执行语句，Python 解释器执行 def 语句时，就会在�
 第三次、四次依此类推。所以现在你应该明白为什么调用同一个函数，返回值确每次都不一样了吧。因为他们共享的是同一个列表(numbers)对象，只是每调用一次就往该列表中增加了一个元素。
 
 
-## Mac上如何将pip可执行文件放入全局
+### Mac上如何将pip可执行文件放入全局
 
 ```python
 sudo cp /Library/Frameworks/Python.framework/Versions/3.6/bin/virtualenv /usr/local/bin/
@@ -155,12 +155,12 @@ sudo cp /Library/Frameworks/Python.framework/Versions/3.6/bin/virtualenv /usr/lo
 参考文章：
 - [Mac上command not found: virtualenv](https://blog.csdn.net/weixin_42539198/article/details/88739542)
 
-## SVN: E155021: This client is too old to work...
+### SVN: E155021: This client is too old to work...
 SVN版本太旧了，只需要设置一下svn内置的版本就可以了
 ![snailsvnlite](https://tva1.sinaimg.cn/large/006y8mN6ly1g6pkh7xs01j30qi0kcn0l.jpg)
 
 
-## 避免环形引用
+### 避免环形引用
 
 ```python
 # 层级结构
@@ -207,7 +207,7 @@ class Login:
 - [python解决循环引用问题](https://www.jianshu.com/p/a1e91cc53b07)
 - [python模块循环引用导致问题](https://www.imooc.com/article/34235)
 
-## Centos环境初始化
+### Centos环境初始化
 
 ```pyhton
 # 编译时会出现缺失“Python.h”错误
@@ -224,7 +224,7 @@ yum install python36-dev  # 安装python3.6-dev
 
 ```
 
-## Python 内存泄漏
+### Python 内存泄漏
 内存泄漏指的是：对象创建时分配内存，但结束时该对象的内存没有被释放（存在引用）。这种情况导致了随着程序的运行，会出现越来越多对象被创建却没有释放的情况，导致内存占用越来越大。
 
 两种场景：
@@ -256,7 +256,7 @@ del d1  # 本应该在这里打印del的内容
 - [Scrapy的内存泄露问题总结](https://www.imooc.com/article/50843)
 
 
-## property 动态属性
+### property 动态属性
 ```python
 class User1:
     """property 动态属性"""
@@ -269,7 +269,7 @@ class User1:
         return 18
 ```
 
-## 属性描述符与非属性描述符
+### 属性描述符与非属性描述符
 ```python
 class IntField(object):
     """数据属性描述符"""

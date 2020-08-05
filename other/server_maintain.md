@@ -75,6 +75,10 @@ which python
 cd /usr/bin/
 cp python python_2
 cp python-config python-config_2
+rm python
+rm python-config
+cp /opt/python36/bin/python3.6 python
+cp /opt/python36/bin/python3-config python-config   
 ```
 
 ### 安装虚拟环境
@@ -90,7 +94,7 @@ pip3 install virtualenvwrapper
 vim ~/.bashrc
 
 # 写入配置，用于虚拟环境管理virtualenvwrapper的配置
-export WORKON_HOME=~/Envs   #设置virtualenv的统一管理目录
+export WORKON_HOME=~/.venv   #设置virtualenv的统一管理目录
 export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'   #添加virtualenvwrapper的参数，生成干净隔绝的环境
 export VIRTUALENVWRAPPER_PYTHON=/opt/python36/bin/python3.6     #指定python解释器
 source /opt/python36/bin/virtualenvwrapper.sh #执行virtualenvwrapper安装脚本
@@ -123,8 +127,40 @@ cdsitepackages
 ```
 
 ### 安装MySQL
+pass
 
+### Centos7环境初始化
+安装注意: 
+- 分区必须存在swap分区。可以自动创建，然后修改
+- 直接插网线也可以使用yum
 
+修改网卡配置文件
+```shell script
+# 步骤一：修改网卡配置文件
+
+vim /etc/sysconfig/network-scripts/ifcfg-ens33  # 不同网卡名称不一样
+ONBOOT = no  # no为不自动分配ip；yes为自动分配ip
+
+# 步骤二：重启网卡，使配置生效
+systemctl restart network
+```
+下载图形界面
+```shell script
+# 步骤一：更新yum
+yum upgrade -y
+
+# 步骤二：安装桌面环境
+yum -y groupinstall "X Window System"  # 安装桌面环境之前需要装这个
+yum -y groupinstall "GNOME Desktop"  # 安装GNOME桌面环境
+
+# 步骤三：重启使用
+reboot  # 重启
+startx  # 切换到桌面环境
+```
+安装必要程序
+```shell script
+yum install net-tools.x86_64
+```
 
 ### 安装jupyter
 步骤一: 安装ipython和jupyter，并进入ipython
@@ -205,7 +241,6 @@ reids-cli  # 启动redis客户端
 
 ```
 ### 安装docker
-# 安装
 ```bash
 # 安装工具包
 sudo yum install -y yum-utils
@@ -250,7 +285,87 @@ systemctl start vsftpd
 # 设置为自启动
 chkconfig vsftpd on
 
-# 参考链接：
+```
+参考文章
 - [ftp工具无法连接到Linux服务器](https://www.cnblogs.com/music-liang/p/11843273.html)
 
+
+### Centos7部署docsify
+```bash
+# 步骤
+# 1.上传docsify项目至服务器（略）
+# 2.安装npm和docsify-cli
+# 3.安装并启动docsify服务
+# 4.安装nginx，并配置端口转发
+
+# 2.安装npm和docsify-cli
+cd /usr/local/src
+wget https://nodejs.org/dist/v8.9.0/node-v8.9.0-linux-x64.tar.xz
+
+tar xf node-v8.9.0-linux-x64.tar.xz
+cd /usr/local
+mv src/node-v8.9.0-linux-x64 node
+
+vi ~/.bashrc
+export NODE_HOME=/usr/local/node
+export PATH=$NODE_HOME/bin:$PATH
+source ~/.bashrc
+
+node -v
+
+
+# 3.安装并启动docsify服务
+npm i docsify-cli -g
+yum install screen
+screen -S programming-guide
+docsify serve  # 默认在本地3000端口启动服务
+ctrl a + d
+
+# 4.安装nginx，并配置端口转发
+yum install nginx
+vi /etc/nginx/nginx.conf
+
+server {
+      listen 80;
+      server_name your_server_name; ## 这里需要写自己的服务器名称
+      root /root/projects/programming-guide; ## docsify创建的目录
+      set $node_port 3000;
+      index index.js index.html index.htm;
+      location / {
+        proxy_http_version 1.1;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_pass http://127.0.0.1:$node_port$request_uri;
+        proxy_redirect off;
+      }
+    }
+
+systemctl restart nginx
+# 5.打开80端口，查看页面
 ```
+参考文章
+- [基于滴滴云搭建轻量文档网站生成工具 Docsify](http://blog.itpub.net/31559758/viewspace-2286489/)
+
+### 安装Cockpit
+```shell script
+# 安装Cockpit
+yum install cockpit
+
+# 启动cockpit.socket服务
+systemctl start cockpit.socket
+systemctl enable --now cockpit.socket
+systemctl status cockpit.socket
+
+# 关闭防火墙
+firewall-cmd --add-service=cockpit --permanent
+firewall-cmd --reload
+
+# 开放9090端口
+```
+参考文章：
+- [如何在 CentOS 8 中安装 Cockpit Web 控制台](https://www.linuxidc.com/Linux/2019-10/161221.htm)
+

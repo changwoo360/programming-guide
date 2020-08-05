@@ -1,3 +1,31 @@
+### pip
+生成pip环境安装清单  
+```shell
+pip freeze > requirements.txt
+```
+安装requirements.txt  
+```shell
+pip install -i https://pypi.douban.com/simple -r requirements.txt
+```
+参考文章
+- [pip常用命令](https://www.cnblogs.com/changwoo/p/9569371.html)
+
+
+
+### random
+```python
+result = random.randint(1, 7)  # 随机生成1到7的整数
+result = random.random()  # 随机生成[0,1)的浮点数
+result = random.randrange(1, 7)  # 随机生成1到7的整数
+result = random.choice([1, 2, 3, 4])  # 从列表中随机选择一个元素
+result = random.choice((1, 2, 3, 4))
+li = [1, 2, 3, 4]
+random.shuffle(li)  # 打乱li的顺序
+result = random.sample(li, 3)  # 从列表中随机截取3个元素组成一个新的列表
+```
+
+
+
 ### re —— 正则匹配
 
 循环多次匹配规则

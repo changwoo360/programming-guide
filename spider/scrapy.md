@@ -1,9 +1,48 @@
+#### scrapy 架构图    
+![scrapy架构图](https://scrapy-chs.readthedocs.io/zh_CN/latest/_images/scrapy_architecture.png)
 
+#### scrapy command  
+```shell script
+- Create a project:
+    scrapy startproject project_name
+
+- Create a spider (in project directory):
+    scrapy genspider spider_name website_domain
+
+- Run spider (in project directory):
+    scrapy crawl spider_name
+
+- Open scrapy shell for url, which allows interaction with the page source in python shell (or ipython if available):
+    scrapy shell url
+```
+
+#### scrapy settings  
 ```python
 settings.py
 
 AJAXCRAWL_ENABLED = False
+
+
 # 自动限速设置
+
+from scrapy.contrib.throttle import AutoThrottle #http://scrapy.readthedocs.io/en/latest/topics/autothrottle.html#topics-autothrottle
+"""
+设置目标：
+1、比使用默认的下载延迟对站点更好
+2、自动调整scrapy到最佳的爬取速度，所以用户无需自己调整下载延迟到最佳状态。用户只需要定义允许最大并发的请求，剩下的事情由该扩展组件自动完成
+
+实现
+在Scrapy中，下载延迟是通过计算建立TCP连接到接收到HTTP包头(header)之间的时间来测量的。
+注意，由于Scrapy可能在忙着处理spider的回调函数或者无法下载，因此在合作的多任务环境下准确测量这些延迟是十分苦难的。 不过，这些延迟仍然是对Scrapy(甚至是服务器)繁忙程度的合理测量，而这扩展就是以此为前提进行编写的。
+
+自动限速算法基于以下规则调整下载延迟
+1、spiders开始时的下载延迟是基于AUTOTHROTTLE_START_DELAY的值
+2、当收到一个response，对目标站点的下载延迟=收到响应的延迟时间/AUTOTHROTTLE_TARGET_CONCURRENCY
+3、下一次请求的下载延迟就被设置成：对目标站点下载延迟时间和过去的下载延迟时间的平均值
+4、没有达到200个response则不允许降低延迟
+5、下载延迟不能变的比DOWNLOAD_DELAY更低或者比AUTOTHROTTLE_MAX_DELAY更高
+"""
+
 AUTOTHROTTLE_ENABLED = False
 AUTOTHROTTLE_DEBUG = False
 # 最大下载延迟
@@ -420,36 +459,7 @@ SPIDER_CONTRACTS_BASE = {
     'scrapy.contracts.default.ReturnsContract': 2,
     'scrapy.contracts.default.ScrapesContract': 3,
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ```
+
+#### 参考文章
+- [真正的了解scrapy框架](https://www.cnblogs.com/zhaopanpan/p/9344578.html)
